@@ -1,0 +1,1 @@
+from app.controllers.heroes_controllers import router as heroes_router
