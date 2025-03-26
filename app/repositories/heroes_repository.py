@@ -36,7 +36,7 @@ class HeroesRepository:
             db_hero.city = hero.city
         db.commit()
         db.refresh(db_hero)
-        return db[hero_id]
+        return db_hero
 
     def delete_hero(self, db: Session, hero_id: int):
         db_superhero = db.query(HeroModel).filter(HeroModel.id == hero_id).first()
