@@ -1,7 +1,1 @@
-from pydantic import BaseModel
-
-
-class Hero(BaseModel):
-    name: str
-    age: int
-    city: str
+from app.schemas.heroes_schema import Hero

@@ -1,31 +1,46 @@
 from fastapi import HTTPException
-from  app.repositories.database import  data
-from app.schemas import Hero
+from sqlalchemy.orm import Session
+
+
+from app.repositories.models.heroes_model import HeroModel
 
 class HeroesRepository:
-    def __init__(self):
-        self.data = data
 
-    def get_heroes(self):
-        return self.data
+    def get_heroes(self, db: Session):
+        return db.query(HeroModel).all()
 
-    def get_hero(self, hero_id: int):
-        if not hero_id in range(len(self.data)):
+    def get_hero(self, db: Session, hero_id: int):
+        hero = db.query(HeroModel).filter_by(id=hero_id).first()
+        if not hero:
             raise HTTPException(status_code=404, detail="Hero not found")
-        return self.data[hero_id]
+        return hero
 
-    def create_hero(self, hero: Hero):
-        self.data.append(hero.model_dump())
-        return self.data[-1]
+    def create_hero(self, db: Session, hero: HeroModel):
+        new_hero = HeroModel(
+        name=hero.name,
+        age=hero.age,
+        city=hero.city
+        )
+        db.add(new_hero)
+        db.commit()
+        db.refresh(new_hero)
+        return new_hero
 
-    def update_hero(self, hero_id: int, hero: Hero):
-        if not hero_id in range(len(self.data)):
+    def update_hero(self, db: Session, hero_id: int, hero: HeroModel):
+        db_hero = db.query(HeroModel).filter_by(id=hero_id).first()
+        if not db_hero:
             raise HTTPException(status_code=404, detail="Hero not found")
-        self.data[hero_id] = hero.model_dump()
-        return self.data[hero_id]
+        if db_hero:
+            db_hero.name = hero.name
+            db_hero.age = hero.age
+            db_hero.city = hero.city
+        db.commit()
+        db.refresh(db_hero)
+        return db[hero_id]
 
-    def delete_hero(self, hero_id: int):
-        if not hero_id in range(len(self.data)):
-            raise HTTPException(status_code=404, detail="Hero not found")
-        self.data.pop(hero_id)
-        return self.data
+    def delete_hero(self, db: Session, hero_id: int):
+        db_superhero = db.query(HeroModel).filter(HeroModel.id == hero_id).first()
+        if db_superhero:
+            db.delete(db_superhero)
+            db.commit()
+        return db_superhero

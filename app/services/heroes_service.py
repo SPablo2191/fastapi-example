@@ -1,22 +1,24 @@
+from sqlalchemy.orm import Session
+
 from app.repositories import HeroesRepository
-from app.schemas import Hero    
+from app.repositories.models.heroes_model import HeroModel   
 
 
 class HeroesService:
     def __init__(self):
         self.repository : HeroesRepository = HeroesRepository()
 
-    def get_heroes(self):
-        return self.repository.get_heroes()
+    def get_heroes(self, db: Session):
+        return self.repository.get_heroes(db)
 
-    def get_hero(self, hero_id: int):
-        return self.repository.get_hero(hero_id)
+    def get_hero(self, db: Session, hero_id: int):
+        return self.repository.get_hero(db,hero_id)
 
-    def create_hero(self, hero: Hero):
-        return self.repository.create_hero(hero)
+    def create_hero(self, db: Session, hero: HeroModel):
+        return self.repository.create_hero(db,hero)
 
-    def update_hero(self, hero_id: int, hero: Hero):
-        return self.repository.update_hero(hero_id, hero)
+    def update_hero(self, db: Session, hero_id: int, hero: HeroModel):
+        return self.repository.update_hero(db,hero_id, hero)
 
-    def delete_hero(self, hero_id: int):
-        return self.repository.delete_hero(hero_id)
+    def delete_hero(self, db: Session, hero_id: int):
+        return self.repository.delete_hero(db,hero_id)
