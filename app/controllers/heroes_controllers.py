@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.repositories.database import get_db
 from app.services import HeroesService
 from app.schemas import Hero
+from app.schemas.heroes_schema import HeroWithSidekicks
 
 router  = APIRouter(prefix="/heroes", tags=["Heroes"])
 service = HeroesService()
@@ -12,7 +13,7 @@ service = HeroesService()
 def get_heroes(db: Session = Depends(get_db)):
     return service.get_heroes(db)
 
-@router.get("/hero/{hero_id}")
+@router.get("/hero/{hero_id}", response_model=HeroWithSidekicks)
 def get_hero(hero_id: int,db: Session = Depends(get_db),):
     return service.get_hero(db,hero_id)
 
