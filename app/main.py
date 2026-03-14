@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.controllers import heroes_router, sidekicks_router
+from app.controllers import heroes_router, sidekicks_router, villains_router
 from app.repositories.database import Base,engine
 # creo mi instancia de FastAPI
 
@@ -8,3 +8,4 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(router=heroes_router, prefix=f"/api/v1")
 app.include_router(router=sidekicks_router, prefix=f"/api/v1")
+app.include_router(router=villains_router, prefix=f"/api/v1")

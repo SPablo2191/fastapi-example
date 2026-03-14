@@ -1,2 +1,3 @@
 from app.services.heroes_service import HeroesService
 from app.services.sidekicks_service import SidekicksService
+from app.services.villains_service import VillainsService

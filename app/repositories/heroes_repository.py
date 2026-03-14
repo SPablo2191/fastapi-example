@@ -10,7 +10,10 @@ class HeroesRepository:
         return db.query(HeroModel).all()
 
     def get_hero(self, db: Session, hero_id: int):
-        hero = db.query(HeroModel).options(joinedload(HeroModel.sidekicks)).filter_by(id=hero_id).first()
+        hero = db.query(HeroModel).options(
+            joinedload(HeroModel.sidekicks),
+            joinedload(HeroModel.villains)
+        ).filter_by(id=hero_id).first()
         if not hero:
             raise HTTPException(status_code=404, detail="Hero not found")
         return hero
