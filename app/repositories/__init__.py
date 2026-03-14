@@ -1,1 +1,2 @@
 from app.repositories.heroes_repository import HeroesRepository
+from app.repositories.sidekicks_repository import SidekicksRepository
